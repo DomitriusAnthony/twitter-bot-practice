@@ -3,9 +3,11 @@ const config = require('./config')
 
 const Twitter = new twit(config);
 
-// Find the latest tweet accoring to the query(q) in params
+// RETWEET BOT
+
 
 const retweet = function() {
+    // Find the latest tweet accoring to the query(q) in params
     const params = {
         q: '#nodejs, #Nodejs',
         result_type: 'recent',
@@ -36,4 +38,41 @@ const retweet = function() {
         }
     })
 };
+
+setInterval(retweet, 3000000);
+
+
+// FAVORITE BOT
+
+// Find a random tweet and 'favorite' it 
+var favoriteTweet = function() {
+    var params = {
+        q: "#nodejs, #Nodsjs",
+        result_type: "recent",
+        land: "en"
+    }
+
+    Twitter.get('search/tweets', params, (err, data) =>{
+        // find tweets
+        var tweet = data.statuses;
+        var randomTweet = randomTweet(tweet) // This picks a random tweet
+
+        // if the random tweet exists
+        if (typeof randomTweet != 'undefined') {
+            // Tell Twitter to 'favorite'
+            Twitter.post('favorites/create', {id: randomTweet.id_str}, (err, response) => {
+                // if there was an error while trying to favorite
+                if(err) {
+                    console.log('Cannot favorite this bad boy');
+                } else {
+                    console.log('Success!')
+                }
+            })
+        }
+    })
+}
+
+// Favorites a tweet every 60 minutes
+setInterval(favoriteTweet, 3600000);
+
 
