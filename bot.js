@@ -18,10 +18,10 @@ const retweet = function() {
         // if there are no errors
         if (!err) {
             // grab the ID of the tweet to retweet
-            var retweetedId = data.statuses(0).id_str;
+            var retweetedId = data.statuses[0].id_str;
             // Tell Twitter to retweet
             Twitter.post('statuses/retweet/:id', {
-                id: retweetId
+                id: retweetedId
             },function(err, response) {
                 if (response) {
                     console.log("Retweeted your tweet bro")
@@ -39,6 +39,7 @@ const retweet = function() {
     })
 };
 
+retweet();
 setInterval(retweet, 3000000);
 
 
@@ -55,7 +56,7 @@ var favoriteTweet = function() {
     Twitter.get('search/tweets', params, (err, data) =>{
         // find tweets
         var tweet = data.statuses;
-        var randomTweet = randomTweet(tweet) // This picks a random tweet
+        var randomTweet = ranDom(tweet) // This picks a random tweet
 
         // if the random tweet exists
         if (typeof randomTweet != 'undefined') {
@@ -72,7 +73,12 @@ var favoriteTweet = function() {
     })
 }
 
+favoriteTweet();
 // Favorites a tweet every 60 minutes
 setInterval(favoriteTweet, 3600000);
 
+function ranDom (arr) {
+    var index = Math.floor(Math.random()*arr.length);
+    return arr[index];
+};
 
